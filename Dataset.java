@@ -95,6 +95,7 @@ public class Dataset {
         trainLabel.add(Integer.parseInt(token[token.length - 1]));
       }
     }
+    fileReader.close();
   }
 
   /**
@@ -122,6 +123,7 @@ public class Dataset {
         testFeature.add(feature);
       }
     }
+    fileReader.close();
   }
 
   /**
