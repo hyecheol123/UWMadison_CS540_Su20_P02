@@ -13,4 +13,6 @@ The dataset contains value of `?`, meaning missing entry. While parse the datase
 To see the description of this dataset, please visit [here](https://github.com/hyecheol123/UWMadison_CS540_Su20_P02/blob/master/breast-cancer-wisconsin.names).
 
 ### Data Pre-process
-
+Code for daa preprocess and load is located in separated class, [Dataset.java](https://github.com/hyecheol123/UWMadison_CS540_Su20_P02/blob/master/Dataset.java)
+- Remove rows with missing entry
+- id is not used while training/testing. Remove id field
