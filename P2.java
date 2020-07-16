@@ -64,7 +64,46 @@ public class P2 {
     resultFileWriter.append(dataset.getLabelCountsString() + "\n");
     resultFileWriter.flush();
 
+    // Q2: initial entropy at the root before the split (4 decimal places)
+    resultFileWriter.append("@answer_2\n");
+    resultFileWriter.append(String.format("%.4f\n", binaryEntropy(dataset.getLabelCounts())));
+    resultFileWriter.flush();
+
     // Close resultFileWriter
     resultFileWriter.close();
+  }
+
+  /**
+   * calcuate binary entropy
+   * 
+   * @param p0 probability for 1st label
+   * @return binary entropy
+   */
+  private static double binaryEntropy(double p0) {
+    if (p0 == 0 || p0 == 1) { // very certain cases
+      return 0;
+    } else {
+      double p1 = 1 - p0; // 2nd label probability
+      return -(p0 * (Math.log(p0) / Math.log(2)) + p1 * (Math.log(p1) / Math.log(2)));
+    }
+  }
+
+  /**
+   * calculate binary entropy
+   * 
+   * @param labelCounts Integer array contains number of each cases appears at the node
+   * @return binary entropy
+   */
+  private static double binaryEntropy(Integer[] labelCounts) {
+    if(labelCounts[0] == 0 | labelCounts[1] == 0) { // very certain cases
+      return 0;
+    } else {
+      // Calculate Probability
+      int total = labelCounts[0] + labelCounts[1];
+      double p0 = (double)labelCounts[0] / total;
+      double p1 = (double)labelCounts[1] / total;
+
+      return -(p0 * (Math.log(p0) / Math.log(2)) + p1 * (Math.log(p1) / Math.log(2)));
+    }
   }
 }

@@ -166,10 +166,19 @@ public class Dataset {
   }
 
   /**
-   * Acessor for label counts: numBenign and numMalignant
+   * Acessor for label counts: numBenign and numMalignant (For Q1)
    * @return String contains information of numBenign and numMaligant, in order (comma separated)
    */
   public String getLabelCountsString() {
     return (numBenign + "," + numMalignant);
+  }
+
+    /**
+   * Acessor for label counts: numBenign and numMalignant (For Q2)
+   * @return Integer[] contains information of numBenign and numMaligant, in order
+   */
+  public Integer[] getLabelCounts() {
+    Integer[] labelCounts = {numBenign, numMalignant};
+    return labelCounts;
   }
 }

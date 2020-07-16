@@ -3,7 +3,7 @@
 Repository for the 2nd programming assignment of UW-Madison CS540 Summer 2020 course (Introduction to Artificial Intelligence)
 
 
-## Tasks
+## Goal
 Implement decision tree to diagnose whether a patient has some disease based on their symptoms and medical test results.  
 
 
@@ -32,8 +32,8 @@ Code for daa preprocess and load is located in separated class, [Dataset.java](h
 
 
 ## Tasks
-- Data Loading
-  - Related Question: Q1
+- Data Loading, Test of Important Function Implementation
+  - Related Question: [Q1](), [Q2]()
 - Train a binary decision stump (decision tree with depth 1) using the following feature: 5 (indexed according to the above list).
   - Related Question: 
 - Train a binary decision tree using the following features: 8, 4, 9, 7, 3 (indexed according to the same list).
@@ -47,3 +47,7 @@ Code for daa preprocess and load is located in separated class, [Dataset.java](h
 - **Q1**  
   Enter the total number of positive and negative instances in the training set (two integers, comma-separated, in the order, benign, malignant).
   - Count the existance of each level in training set while loading data
+- **Q2**  
+  Enter the initial entropy at the root before the split (one number, rounded to 4 decimal places).
+  - Before any split, the probability for each label is only depend on the number of label in entire train set.
+  - Test for implementation of [entropy function]().
