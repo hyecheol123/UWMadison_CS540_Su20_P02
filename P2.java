@@ -25,7 +25,11 @@
 //
 /////////////////////////////// 80 COLUMNS WIDE //////////////////////////////
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.Scanner;
 
 /**
  * Main class for P2
@@ -34,12 +38,29 @@ public class P2 {
   /**
    * Main method of P2
    * 
-   * @param args Command Line Arguments
+   * @param args Command Line Arguments (CLAs)
    * @throws IOException Occurred when I/O Operation Interrupted
    */
   public static void main(String[] args) throws IOException {
+    // Get netID and result file location
+    Scanner consoleScnr = new Scanner(System.in);
+    System.out.print("Enter Result File Location(Name): ");
+    String resultFileLoc = consoleScnr.nextLine();
+    System.out.println("Need NetID to properly format result file");
+    System.out.print("Enter Your UWMadison NetID: ");
+    String netID = consoleScnr.nextLine();
+    consoleScnr.close();
+    // Initialize resultFileWriter
+    BufferedWriter resultFileWriter = new BufferedWriter(new FileWriter(new File(resultFileLoc)));
+    // Format header of result file
+    resultFileWriter.append("Outputs:\n@id\n" + netID + "\n");
+    resultFileWriter.flush();
+
     // Retrieve Datasets
     Dataset dataset = new Dataset("breast-cancer-wisconsin.data", "test.txt");
     
+
+    // Close resultFileWriter
+    resultFileWriter.close();
   }
 }
