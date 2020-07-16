@@ -16,3 +16,34 @@ To see the description of this dataset, please visit [here](https://github.com/h
 Code for daa preprocess and load is located in separated class, [Dataset.java](https://github.com/hyecheol123/UWMadison_CS540_Su20_P02/blob/master/Dataset.java)
 - Remove rows with missing entry
 - id is not used while training/testing. Remove id field
+
+### List of Variables
+1. Sample code number: id number
+2. Clump Thickness: 1 - 10
+3. Uniformity of Cell Size: 1 - 10
+4. Uniformity of Cell Shape: 1 - 10
+5. Marginal Adhesion: 1 - 10
+6. Single Epithelial Cell Size: 1 - 10
+7. Bare Nuclei: 1 - 10
+8. Bland Chromatin: 1 - 10
+9. Normal Nucleoli: 1 - 10
+10. Mitoses: 1 - 10
+11. Class: (2 for benign, 4 for malignant)
+
+
+## Tasks
+- Data Loading
+  - Related Question: Q1
+- Train a binary decision stump (decision tree with depth 1) using the following feature: 5 (indexed according to the above list).
+  - Related Question: 
+- Train a binary decision tree using the following features: 8, 4, 9, 7, 3 (indexed according to the same list).
+  - Related Question: 
+- Classify the following patients using your tree.
+  - Related Question: 
+- Prune the tree so that the maximum depth is 6. The root is at depth 0.
+  - Related Question: 
+
+## Questions
+- **Q1**  
+  Enter the total number of positive and negative instances in the training set (two integers, comma-separated, in the order, benign, malignant).
+  - Count the existance of each level in training set while loading data

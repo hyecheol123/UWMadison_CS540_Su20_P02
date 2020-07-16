@@ -59,6 +59,10 @@ public class P2 {
     // Retrieve Datasets
     Dataset dataset = new Dataset("breast-cancer-wisconsin.data", "test.txt");
     
+    // Q1: total number of positive and negative instances in the training set
+    resultFileWriter.append("@answer_1\n");
+    resultFileWriter.append(dataset.getLabelCountsString() + "\n");
+    resultFileWriter.flush();
 
     // Close resultFileWriter
     resultFileWriter.close();

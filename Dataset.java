@@ -45,6 +45,7 @@ public class Dataset {
   // Dataset Characteristics
   String trainSetFileLoc; // location of train set file
   String testSetFileLoc; // location of test set file
+  int numBenign, numMalignant; // Number of Each cases in train set (Q1)
 
   /**
    * Constructor of Dataset
@@ -61,6 +62,10 @@ public class Dataset {
     trainFeature = new ArrayList<>();
     trainLabel = new ArrayList<>();
     testFeature = new ArrayList<>();
+
+    // Initialize label counters
+    numBenign = 0; // 2
+    numMalignant = 0; // 4
 
     // Parse train/test set file
     loadTrainSet();
@@ -92,7 +97,14 @@ public class Dataset {
         trainFeature.add(feature);
 
         // Load label
-        trainLabel.add(Integer.parseInt(token[token.length - 1]));
+        Integer label = Integer.parseInt(token[token.length - 1]);
+        trainLabel.add(label);
+        // Count label
+        if(label == 2) {
+          numBenign++;
+        } else {
+          numMalignant++;
+        }
       }
     }
     fileReader.close();
@@ -151,5 +163,13 @@ public class Dataset {
    */
   public ArrayList<Integer[]> getTestFeature() {
     return testFeature;
+  }
+
+  /**
+   * Acessor for label counts: numBenign and numMalignant
+   * @return String contains information of numBenign and numMaligant, in order (comma separated)
+   */
+  public String getLabelCountsString() {
+    return (numBenign + "," + numMalignant);
   }
 }
