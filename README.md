@@ -37,7 +37,7 @@ Code for daa preprocess and load is located in separated class, [Dataset.java](h
 - Train a binary decision stump (decision tree with depth 1) using the following feature: 5 (indexed according to the above list).
   - Related Question: [Q3](), [Q4]()
 - Train a binary decision tree using the following features: 8, 4, 9, 7, 3 (indexed according to the same list).
-  - Related Question: 
+  - Related Question: [Q5]()
 - Classify the following patients using your tree.
   - Related Question: 
 - Prune the tree so that the maximum depth is 6. The root is at depth 0.
@@ -59,3 +59,15 @@ Code for daa preprocess and load is located in separated class, [Dataset.java](h
   For the decision stump (Part 1), enter the information gain after the split (one number, rounded to 4 decimal places).
   - Save the maximum information gain during training time.
   - Test for implementation of [training function]().
+- **Q5**  
+  Input the binary decision tree in the format below (`tree_full`).  
+  ```
+  if (x8 <= 5)
+    if (x4 <= 2) return 2
+    else return 4
+  else
+    if (x4 <= 8) return 4
+    else return 2
+  ```
+  - Use [recurrsive private helper method]()
+  - Test for implementation of [training function]() and understanding of Depth First Search

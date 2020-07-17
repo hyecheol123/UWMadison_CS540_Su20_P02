@@ -87,6 +87,16 @@ public class P2 {
     resultFileWriter.append(String.format("%.4f\n", root.getInformationGain()));
     resultFileWriter.flush();
 
+    // Decision Tree Training (Part 2)
+    featureList = new ArrayList<>(Arrays.asList(8, 4, 9, 7, 3));
+    root = trainDecisionTree(dataset.getTrainFeature(), dataset.getTrainLabel(), featureList);
+    // Q5: binary decision tree String (Q5)
+    StringBuffer decisionTreeStringBuffer = new StringBuffer();
+    stringDecisionTree(root, decisionTreeStringBuffer, 0);
+    resultFileWriter.append("@tree_full\n");
+    resultFileWriter.append(decisionTreeStringBuffer.toString().trim() + "\n");
+    resultFileWriter.flush();
+
     // Close resultFileWriter
     resultFileWriter.close();
   }
@@ -215,5 +225,44 @@ public class P2 {
     }
 
     return node;
+  }
+
+  /**
+   * Recursive helper method to make string of decision rules
+   * 
+   * @param root root of (sub)tree
+   * @param outputBuffer Strings will be made by StringBuffer
+   * @param depth depth of current node(root)
+   */
+  private static void stringDecisionTree(DecisionTreeNode root, StringBuffer outputBuffer, int depth) {
+    // leaf node: write return command
+    if(root.isLeaf()) {
+      outputBuffer.append(" return ").append(root.getClassLabel());
+      return;
+    }
+    // non-leaf: write indent, decision rules
+    else {
+      // left-side
+      // indent
+      outputBuffer.append("\n");
+      for(int i = 0; i < depth; i++) {
+        outputBuffer.append("  ");
+      }
+      // decision rule
+      outputBuffer.append("if (x").append(root.getFeature()).append(" <= ").append(root.getThreshold()).append(")");
+      // traverse on the left-side child
+      stringDecisionTree(root.getLeftChild(), outputBuffer, depth + 1);
+
+      // right-side
+      // indent
+      outputBuffer.append("\n");
+      for(int i = 0; i < depth; i++) {
+        outputBuffer.append("  ");
+      }
+      // decision rule
+      outputBuffer.append("else ");
+      // traverse on the right-side child
+      stringDecisionTree(root.getRightChild(), outputBuffer, depth + 1);
+    }
   }
 }
