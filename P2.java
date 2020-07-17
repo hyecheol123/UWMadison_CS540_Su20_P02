@@ -80,7 +80,11 @@ public class P2 {
     // Q3: enter the number of positive and negative instances in the training set above and below the threshold
     resultFileWriter.append("@answer_3\n");
     resultFileWriter.append(root.getRightChild().getLabelCounts()[0] + "," + root.getLeftChild().getLabelCounts()[0] 
-        + "," + root.getRightChild().getLabelCounts()[1] + "," + root.getLeftChild().getLabelCounts()[1]);
+        + "," + root.getRightChild().getLabelCounts()[1] + "," + root.getLeftChild().getLabelCounts()[1] + "\n");
+    resultFileWriter.flush();
+    // Q4: enter the information gain after the split (4 decimal places)
+    resultFileWriter.append("@answer_4\n");
+    resultFileWriter.append(String.format("%.4f\n", root.getInformationGain()));
     resultFileWriter.flush();
 
     // Close resultFileWriter
@@ -197,14 +201,14 @@ public class P2 {
       // make new node with dominant class labels
       if(Collections.frequency(trainDataLabel, 2) >= Collections.frequency(trainDataLabel, 4)) {
         node = new DecisionTreeNode(bestFeature, bestThreshold, 2, 
-            Collections.frequency(trainDataLabel, 2), Collections.frequency(trainDataLabel, 4));
+            Collections.frequency(trainDataLabel, 2), Collections.frequency(trainDataLabel, 4), bestInformationGain);
       } else {
         node = new DecisionTreeNode(bestFeature, bestThreshold, 4,
-            Collections.frequency(trainDataLabel, 2), Collections.frequency(trainDataLabel, 4));
+            Collections.frequency(trainDataLabel, 2), Collections.frequency(trainDataLabel, 4), bestInformationGain);
       }
     } else { // non-leaf
       node = new DecisionTreeNode(bestFeature, bestThreshold, null,
-          Collections.frequency(trainDataLabel, 2), Collections.frequency(trainDataLabel, 4));
+          Collections.frequency(trainDataLabel, 2), Collections.frequency(trainDataLabel, 4), bestInformationGain);
       // Train for its children
       node.setRightChild(trainDecisionTree(rightDataFeature, rightDataLabel, featureList));
       node.setLeftChild(trainDecisionTree(leftDataFeature, leftDataLabel, featureList));

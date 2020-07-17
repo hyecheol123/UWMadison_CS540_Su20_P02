@@ -36,6 +36,7 @@ public class DecisionTreeNode {
   private DecisionTreeNode[] children = new DecisionTreeNode[2]; // left and right, in order
   // For Question Solutions
   private int numBenign, numMalignant; // Number of Each cases in train set (Q3)
+  private double informationGain; // Current Node's Information Gain (Q4)
 
   /**
    * Constructor for DecisionTreeNode
@@ -45,13 +46,16 @@ public class DecisionTreeNode {
    * @param classLabel null if this node is non-leaf, otherwise, assign proper class label of leaf node.
    * @param numBenign number of positive cases in the training set
    * @param numMaligant number of negative cases in the training set
+   * @param informationGain Current Node's Information Gain (Q4)
    */
-  DecisionTreeNode(int feature, double threshold, Integer classLabel, int numBenign, int numMalignant) {
+  DecisionTreeNode(int feature, double threshold, Integer classLabel,
+      int numBenign, int numMalignant, double informationGain) {
     this.feature = feature;
     this.threshold = threshold;
     this.classLabel = classLabel;
     this.numBenign = numBenign;
     this.numMalignant = numMalignant;
+    this.informationGain = informationGain;
   }
 
   /**
@@ -128,11 +132,21 @@ public class DecisionTreeNode {
   }
 
   /**
-   * Acessor for label counts: numBenign and numMalignant (For Q2)
+   * Acessor for label counts: numBenign and numMalignant (For Q3)
+   * 
    * @return Integer[] contains information of numBenign and numMaligant, in order
    */
   public Integer[] getLabelCounts() {
     Integer[] labelCounts = {numBenign, numMalignant};
     return labelCounts;
+  }
+
+  /**
+   * Accessor for current node's information gain (For Q4)
+   * 
+   * @return current node's information gain
+   */
+  public double getInformationGain() {
+    return informationGain;
   }
 }
