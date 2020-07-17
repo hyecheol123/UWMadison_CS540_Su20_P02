@@ -31,7 +31,7 @@
 public class DecisionTreeNode {
   // Instance Variables
   private int feature;
-  private int threshold;
+  private double threshold;
   private Integer classLabel; // only used when the node is leaf (null if non-leaf)
   private DecisionTreeNode[] children = new DecisionTreeNode[2]; // left and right, in order
 
@@ -42,7 +42,7 @@ public class DecisionTreeNode {
    * @param threshold threshold of this node
    * @param classLabel null if this node is non-leaf, otherwise, assign proper class label of leaf node.
    */
-  DecisionTreeNode(int feature, int threshold, Integer classLabel) {
+  DecisionTreeNode(int feature, double threshold, Integer classLabel) {
     this.feature = feature;
     this.threshold = threshold;
     this.classLabel = classLabel;
@@ -81,7 +81,7 @@ public class DecisionTreeNode {
    * 
    * @return threshold value
    */
-  public int getThreshold() {
+  public double getThreshold() {
     return threshold;
   }
   
