@@ -139,14 +139,15 @@ public class P2 {
   }
 
   /**
+   * Train Decision tree on given training (sub)set with given features
    * 
-   * @param trainDataFeature
-   * @param trainDataLabel
-   * @param featureList
-   * @return
+   * @param trainDataFeature Feature part of Training (sub)set
+   * @param trainDataLabel Label part of Training (sub)set
+   * @param featureList list of feature index that will be used to train the decision tree
+   * @return root node of the decision tree
    */
-  public DecisionTreeNode trainDecisionTree(ArrayList<Integer[]> trainDataFeature, ArrayList<Integer> trainDataLabel, 
-      ArrayList<Integer> featureList) {
+  private static DecisionTreeNode trainDecisionTree(ArrayList<Integer[]> trainDataFeature,
+      ArrayList<Integer> trainDataLabel, ArrayList<Integer> featureList) {
     int bestFeature = -1; // Indicates the best feature index (Max Information Gain)
     double bestThreshold = -1; // Use Binary Split with mid-points (Range = [1, 10])
     double bestInformationGain = Double.NEGATIVE_INFINITY;
