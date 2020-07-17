@@ -92,9 +92,13 @@ public class P2 {
     root = trainDecisionTree(dataset.getTrainFeature(), dataset.getTrainLabel(), featureList);
     // Q5: binary decision tree String (Q5)
     StringBuffer decisionTreeStringBuffer = new StringBuffer();
-    stringDecisionTree(root, decisionTreeStringBuffer, 0);
+    int depth = depthStringDecisionTree(root, decisionTreeStringBuffer, 0);
     resultFileWriter.append("@tree_full\n");
     resultFileWriter.append(decisionTreeStringBuffer.toString().trim() + "\n");
+    resultFileWriter.flush();
+    // Q6: maximum depth of tree
+    resultFileWriter.append("@answer_6\n");
+    resultFileWriter.append(depth + "\n");
     resultFileWriter.flush();
 
     // Close resultFileWriter
@@ -228,17 +232,19 @@ public class P2 {
   }
 
   /**
-   * Recursive helper method to make string of decision rules
+   * Recursive helper method to make string of decision rules and find depth
+   * For Q5 and Q6
    * 
    * @param root root of (sub)tree
    * @param outputBuffer Strings will be made by StringBuffer
    * @param depth depth of current node(root)
+   * @return depth from current root
    */
-  private static void stringDecisionTree(DecisionTreeNode root, StringBuffer outputBuffer, int depth) {
+  private static int depthStringDecisionTree(DecisionTreeNode root, StringBuffer outputBuffer, int depth) {
     // leaf node: write return command
     if(root.isLeaf()) {
       outputBuffer.append(" return ").append(root.getClassLabel());
-      return;
+      return depth;
     }
     // non-leaf: write indent, decision rules
     else {
@@ -251,7 +257,7 @@ public class P2 {
       // decision rule
       outputBuffer.append("if (x").append(root.getFeature()).append(" <= ").append(root.getThreshold()).append(")");
       // traverse on the left-side child
-      stringDecisionTree(root.getLeftChild(), outputBuffer, depth + 1);
+      int leftDepth = depthStringDecisionTree(root.getLeftChild(), outputBuffer, depth + 1);
 
       // right-side
       // indent
@@ -262,7 +268,9 @@ public class P2 {
       // decision rule
       outputBuffer.append("else ");
       // traverse on the right-side child
-      stringDecisionTree(root.getRightChild(), outputBuffer, depth + 1);
+      int rightDepth = depthStringDecisionTree(root.getRightChild(), outputBuffer, depth + 1);
+
+      return Math.max(leftDepth, rightDepth);
     }
   }
 }
