@@ -123,6 +123,17 @@ public class P2 {
     resultFileWriter.append("@tree_pruned\n");
     resultFileWriter.append(decisionTreeStringBuffer.toString().trim() + "\n");
     resultFileWriter.flush();
+    // Testing with Pruned Tree
+    testLabel = new ArrayList<>();
+    for(Integer[] testFeature : dataset.getTestFeature()) {
+      testLabel.add(testLabel(testFeature, root));
+    }
+    // Q9: class labels of test set using pruned tree
+    outputString = testLabel.toString();
+    outputString = outputString.substring(1, outputString.length() - 1).replaceAll(" ", "");
+    resultFileWriter.append("@label_pruned\n");
+    resultFileWriter.append(outputString + "\n");
+    resultFileWriter.flush();
 
     // Close resultFileWriter
     resultFileWriter.append("@answer_10\nNone");

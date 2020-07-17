@@ -41,7 +41,8 @@ Code for daa preprocess and load is located in separated class, [Dataset.java](h
 - Classify the following patients using your tree.
   - Related Question: [Q7]()
 - Prune the tree so that the maximum depth is 6. The root is at depth 0.
-  - Related Question: [Q8]()
+  - Related Question: [Q8](), [Q9]()
+
 
 ## Questions
 - **Q1**  
@@ -83,4 +84,8 @@ Code for daa preprocess and load is located in separated class, [Dataset.java](h
   - Use [recursive helper method]() to prune the tree
   - Done without validation set
   - The node at depth 6 has been substitute to new leaf node having class label of dominant label.
+  - Test for implementation of pruning algorithm
+- **Q9**  
+  Input the class labels on the test set (200 integers, either 2 or 4, comma separated, in one line). (`label_pruned`)
+  - Use [test method]() with pruned tree
   - Test for implementation of pruning algorithm
