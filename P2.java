@@ -101,6 +101,18 @@ public class P2 {
     resultFileWriter.append(depth + "\n");
     resultFileWriter.flush();
 
+    // Testing
+    ArrayList<Integer> testLabel = new ArrayList<>();
+    for(Integer[] testFeature : dataset.getTestFeature()) {
+      testLabel.add(testLabel(testFeature, root));
+    }
+    // Q7: class labels of test set
+    String outputString = testLabel.toString();
+    outputString = outputString.substring(1, outputString.length() - 1).replaceAll(" ", "");
+    resultFileWriter.append("@label_full\n");
+    resultFileWriter.append(outputString + "\n");
+    resultFileWriter.flush();
+
     // Close resultFileWriter
     resultFileWriter.append("@answer_10\nNone");
     resultFileWriter.close();
@@ -273,5 +285,26 @@ public class P2 {
 
       return Math.max(leftDepth, rightDepth);
     }
+  }
+
+  /**
+   * Generate label of test output with given decision tree
+   * 
+   * @param testFeature test instance
+   * @param decisionTree decision tree to be used for test
+   * @return 2 when postivie, 4 when negative
+   */
+  private static int testLabel(Integer[] testFeature, DecisionTreeNode decisionTree) {
+    // iterate down the tree when the node is not leaf
+    while(!decisionTree.isLeaf()) {
+      if(testFeature[decisionTree.getFeature() - 2] > decisionTree.getThreshold()) { // larger than threshold
+        decisionTree = decisionTree.getRightChild(); // iterate on right subtree
+      } else { // smaller than threshold
+        decisionTree = decisionTree.getLeftChild(); // iterate on left subtree
+      }
+    }
+
+    // reached to the leaf node
+    return decisionTree.getClassLabel(); // return class label of the leaf
   }
 }

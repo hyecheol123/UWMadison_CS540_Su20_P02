@@ -39,7 +39,7 @@ Code for daa preprocess and load is located in separated class, [Dataset.java](h
 - Train a binary decision tree using the following features: 8, 4, 9, 7, 3 (indexed according to the same list).
   - Related Question: [Q5](), [Q6]()
 - Classify the following patients using your tree.
-  - Related Question: 
+  - Related Question: [Q7]()
 - Prune the tree so that the maximum depth is 6. The root is at depth 0.
   - Related Question: 
 
@@ -74,3 +74,7 @@ Code for daa preprocess and load is located in separated class, [Dataset.java](h
 - **Q6**  
   Enter the maximum depth of this tree. The root is at depth 0. For example, if you only have "if ..., else ...", you should enter 1.
   - Test for implementation of [recurrsive private helper method]() perviously used
+- **Q7**  
+  Input the class labels on the test set (200 integers, either 2 or 4, comma separated, in one line). (`label_full`)
+  - Use [test method]()
+  - Test for the general algorithm and implementation of test method
