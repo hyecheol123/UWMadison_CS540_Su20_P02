@@ -102,6 +102,7 @@ public class P2 {
     resultFileWriter.flush();
 
     // Close resultFileWriter
+    resultFileWriter.append("@answer_10\nNone");
     resultFileWriter.close();
   }
 
