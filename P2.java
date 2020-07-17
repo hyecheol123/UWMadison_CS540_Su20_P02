@@ -2,7 +2,7 @@
 //
 // Title:           UWMadison_CS540_Su20_P02
 // This File:       P2.java
-// Files:           Dataset.java, P2.java
+// Files:           Dataset.java, DecisionTreeNode.java, P2.java
 // External Class:  None
 //
 // GitHub Repo:    https://github.com/hyecheol123/UWMadison_CS540_Su20_P02
@@ -30,11 +30,15 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Main class for P2
  */
 public class P2 {
+  static Dataset dataset;
+
   /**
    * Main method of P2
    * 
@@ -57,7 +61,7 @@ public class P2 {
     resultFileWriter.flush();
 
     // Retrieve Datasets
-    Dataset dataset = new Dataset("breast-cancer-wisconsin.data", "test.txt");
+    dataset = new Dataset("breast-cancer-wisconsin.data", "test.txt");
     
     // Q1: total number of positive and negative instances in the training set
     resultFileWriter.append("@answer_1\n");
@@ -71,21 +75,6 @@ public class P2 {
 
     // Close resultFileWriter
     resultFileWriter.close();
-  }
-
-  /**
-   * calcuate binary entropy
-   * 
-   * @param p0 probability for 1st label
-   * @return binary entropy
-   */
-  private static double binaryEntropy(double p0) {
-    if (p0 == 0 || p0 == 1) { // very certain cases
-      return 0;
-    } else {
-      double p1 = 1 - p0; // 2nd label probability
-      return -(p0 * (Math.log(p0) / Math.log(2)) + p1 * (Math.log(p1) / Math.log(2)));
-    }
   }
 
   /**
@@ -105,5 +94,108 @@ public class P2 {
 
       return -(p0 * (Math.log(p0) / Math.log(2)) + p1 * (Math.log(p1) / Math.log(2)));
     }
+  }
+
+  /**
+   * calculate information gain
+   * 
+   * @param trainFeature ArrayList contains the training set's feature
+   * @param trainLabel ArrayList contains the training set's label
+   * @param feature feature index
+   * @param threshold threshold for testing
+   * @return information gain
+   */
+  private static double
+      informationGain(ArrayList<Integer[]> trainFeature, ArrayList<Integer> trainLabel, int feature, double threshold) {
+    // compute H(Y)
+    Integer[] labelCounts = {Collections.frequency(trainLabel, 2), Collections.frequency(trainLabel, 4)};
+    double h_y = binaryEntropy(labelCounts);
+
+    // Compute H(Y|X)
+    double h_yx = 0;
+    ArrayList<Integer> labelSmaller = new ArrayList<>();
+    ArrayList<Integer> labelGreater = new ArrayList<>();
+    // Split the labels with respect to the threshold
+    for(int i = 0; i < trainFeature.size(); i++) {
+      if(trainFeature.get(i)[feature - 2] > threshold) {
+        labelGreater.add(trainLabel.get(i));
+      } else {
+        labelSmaller.add(trainLabel.get(i));
+      }
+    }
+    // Calculate entropy for each case (smaller and greater)
+    if(labelSmaller.size() != 0) {
+      labelCounts[0] = Collections.frequency(labelSmaller, 2);
+      labelCounts[1] = Collections.frequency(labelSmaller, 4);
+      h_yx += ((double)labelSmaller.size() / trainFeature.size()) * binaryEntropy(labelCounts);
+    }
+    if(labelGreater.size() != 0) {
+      labelCounts[0] = Collections.frequency(labelGreater, 2);
+      labelCounts[1] = Collections.frequency(labelGreater, 4);
+      h_yx += ((double)labelGreater.size() / trainFeature.size()) * binaryEntropy(labelCounts);
+    }
+
+    return h_y - h_yx;
+  }
+
+  /**
+   * 
+   * @param trainDataFeature
+   * @param trainDataLabel
+   * @param featureList
+   * @return
+   */
+  public DecisionTreeNode trainDecisionTree(ArrayList<Integer[]> trainDataFeature, ArrayList<Integer> trainDataLabel, 
+      ArrayList<Integer> featureList) {
+    int bestFeature = -1; // Indicates the best feature index (Max Information Gain)
+    double bestThreshold = -1; // Use Binary Split with mid-points (Range = [1, 10])
+    double bestInformationGain = Double.NEGATIVE_INFINITY;
+    DecisionTreeNode node = null;
+
+    // Iterate through all the feature, and find best feature and threshold (maximize the information gain)
+    for(int featureIndex : featureList) {
+      for(double testThreshold = 0.5; testThreshold < 11; testThreshold++) {
+        // Calculate Information gain and compare wit previous best
+        double informationGain = informationGain(trainDataFeature, trainDataLabel, featureIndex, testThreshold);
+        if(bestInformationGain < informationGain) {
+          bestInformationGain = informationGain;
+          bestFeature = featureIndex;
+          bestThreshold = testThreshold;
+        }
+      }
+    }
+
+    // Split the dataset based on the best feature and threshold
+    ArrayList<Integer[]> leftDataFeature = new ArrayList<>();
+    ArrayList<Integer[]> rightDataFeature = new ArrayList<>();
+    ArrayList<Integer> leftDataLabel = new ArrayList<>();
+    ArrayList<Integer> rightDataLabel = new ArrayList<>();
+    for(int i = 0; i < trainDataFeature.size(); i++) {
+      if(trainDataFeature.get(i)[bestFeature - 2] > bestThreshold) { // right case
+        rightDataFeature.add(trainDataFeature.get(i));
+        rightDataLabel.add(trainDataLabel.get(i));
+      } else { // left case
+        leftDataFeature.add(trainDataFeature.get(i));
+        leftDataLabel.add(trainDataLabel.get(i));
+      }
+    }
+
+    // If bestInformation gain is 0, additional information does not make any difference (Current Node is Leaf)
+    // When the best threshold and feature do not make valid split, current node is leaf
+    if(bestInformationGain == 0 || leftDataFeature.size() == 0 || rightDataFeature.size() == 0) { // leaf
+      // make new node with dominant class labels
+      if(Collections.frequency(trainDataLabel, 2) >= Collections.frequency(trainDataLabel, 4)) {
+        node = new DecisionTreeNode(bestFeature, bestThreshold, 2);
+      } else {
+        node = new DecisionTreeNode(bestFeature, bestThreshold, 4);
+      }
+    } else { // non-leaf
+      node = new DecisionTreeNode(bestFeature, bestThreshold, null);
+      // Train for its children
+      node.setRightChild(trainDecisionTree(rightDataFeature, rightDataLabel, featureList));
+      node.setLeftChild(trainDecisionTree(leftDataFeature, leftDataLabel, featureList));
+    }
+
+    return node;
   }
 }
