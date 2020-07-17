@@ -90,7 +90,7 @@ public class P2 {
     // Decision Tree Training (Part 2)
     featureList = new ArrayList<>(Arrays.asList(8, 4, 9, 7, 3));
     root = trainDecisionTree(dataset.getTrainFeature(), dataset.getTrainLabel(), featureList);
-    // Q5: binary decision tree String (Q5)
+    // Q5: binary decision tree String
     StringBuffer decisionTreeStringBuffer = new StringBuffer();
     int depth = depthStringDecisionTree(root, decisionTreeStringBuffer, 0);
     resultFileWriter.append("@tree_full\n");
@@ -111,6 +111,17 @@ public class P2 {
     outputString = outputString.substring(1, outputString.length() - 1).replaceAll(" ", "");
     resultFileWriter.append("@label_full\n");
     resultFileWriter.append(outputString + "\n");
+    resultFileWriter.flush();
+
+    // Pruning
+    if(pruning(null, root, -1, 0, 6) > 6) {
+      System.out.println("Error!!");
+    }
+    // Q8: the pruned binary decision tree String
+    decisionTreeStringBuffer = new StringBuffer();
+    depthStringDecisionTree(root, decisionTreeStringBuffer, 0);
+    resultFileWriter.append("@tree_pruned\n");
+    resultFileWriter.append(decisionTreeStringBuffer.toString().trim() + "\n");
     resultFileWriter.flush();
 
     // Close resultFileWriter
@@ -279,7 +290,7 @@ public class P2 {
         outputBuffer.append("  ");
       }
       // decision rule
-      outputBuffer.append("else ");
+      outputBuffer.append("else");
       // traverse on the right-side child
       int rightDepth = depthStringDecisionTree(root.getRightChild(), outputBuffer, depth + 1);
 
@@ -306,5 +317,47 @@ public class P2 {
 
     // reached to the leaf node
     return decisionTree.getClassLabel(); // return class label of the leaf
+  }
+
+  /**
+   * Recursive helper method to prune the decision tree
+   * 
+   * @param parent parent node of this node (For root node, assign null)
+   * @param current current node
+   * @param direction Indicate related direction of current node from the parent.
+   *                  If current node is left child of parent, direction is 0.
+   *                  If current node is right chlid of parent, direction is 1.
+   *                  If current node is root node, direction is -1
+   * @param depth current node's depth
+   * @param maxDepth maximum allowed depth (Strictly larger than 0)
+   * @return depth of tree
+   */
+  private static int pruning(DecisionTreeNode parent, DecisionTreeNode current, int direction, int depth, int maxDepth) {
+    if(current.isLeaf()) { // when the node is leaf
+      return depth;
+    } else {
+      if(depth == maxDepth) { // need to prune the tree
+        // This node becomes leaf node with dominant label
+        Integer classLabel;
+        if(current.getLabelCounts()[0] >= current.getLabelCounts()[1]) {
+          classLabel = 2;
+        } else {
+          classLabel = 4;
+        }
+
+        if(direction == 0) { // left node
+          parent.setLeftChild(new DecisionTreeNode(current.getFeature(), current.getThreshold(), classLabel,
+              current.getLabelCounts()[0], current.getLabelCounts()[1], current.getInformationGain()));
+        } else { // right node
+          parent.setRightChild(new DecisionTreeNode(current.getFeature(), current.getThreshold(), classLabel,
+              current.getLabelCounts()[0], current.getLabelCounts()[1], current.getInformationGain()));
+        }
+
+        return depth;
+      } else { // run pruning recursively on its children
+        return Math.max(pruning(current, current.getLeftChild(), 0, depth + 1, maxDepth),
+            pruning(current, current.getRightChild(), 1, depth + 1, maxDepth));
+      }
+    }
   }
 }
