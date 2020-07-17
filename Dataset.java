@@ -173,7 +173,7 @@ public class Dataset {
     return (numBenign + "," + numMalignant);
   }
 
-    /**
+  /**
    * Acessor for label counts: numBenign and numMalignant (For Q2)
    * @return Integer[] contains information of numBenign and numMaligant, in order
    */
