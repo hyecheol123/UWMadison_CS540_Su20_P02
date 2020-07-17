@@ -34,6 +34,8 @@ public class DecisionTreeNode {
   private double threshold;
   private Integer classLabel; // only used when the node is leaf (null if non-leaf)
   private DecisionTreeNode[] children = new DecisionTreeNode[2]; // left and right, in order
+  // For Question Solutions
+  private int numBenign, numMalignant; // Number of Each cases in train set (Q3)
 
   /**
    * Constructor for DecisionTreeNode
@@ -41,11 +43,15 @@ public class DecisionTreeNode {
    * @param feature index of feature
    * @param threshold threshold of this node
    * @param classLabel null if this node is non-leaf, otherwise, assign proper class label of leaf node.
+   * @param numBenign number of positive cases in the training set
+   * @param numMaligant number of negative cases in the training set
    */
-  DecisionTreeNode(int feature, double threshold, Integer classLabel) {
+  DecisionTreeNode(int feature, double threshold, Integer classLabel, int numBenign, int numMalignant) {
     this.feature = feature;
     this.threshold = threshold;
     this.classLabel = classLabel;
+    this.numBenign = numBenign;
+    this.numMalignant = numMalignant;
   }
 
   /**
@@ -119,5 +125,14 @@ public class DecisionTreeNode {
    */
   public DecisionTreeNode getRightChild() {
     return children[1];
+  }
+
+  /**
+   * Acessor for label counts: numBenign and numMalignant (For Q2)
+   * @return Integer[] contains information of numBenign and numMaligant, in order
+   */
+  public Integer[] getLabelCounts() {
+    Integer[] labelCounts = {numBenign, numMalignant};
+    return labelCounts;
   }
 }

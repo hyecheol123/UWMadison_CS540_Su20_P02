@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Arrays;
 
 /**
  * Main class for P2
@@ -71,6 +72,15 @@ public class P2 {
     // Q2: initial entropy at the root before the split (4 decimal places)
     resultFileWriter.append("@answer_2\n");
     resultFileWriter.append(String.format("%.4f\n", binaryEntropy(dataset.getLabelCounts())));
+    resultFileWriter.flush();
+
+    // Decision Stump (Part 1)
+    ArrayList<Integer> featureList = new ArrayList<>(Arrays. asList(5));
+    DecisionTreeNode root = trainDecisionTree(dataset.getTrainFeature(), dataset.getTrainLabel(), featureList);
+    // Q3: enter the number of positive and negative instances in the training set above and below the threshold
+    resultFileWriter.append("@answer_3\n");
+    resultFileWriter.append(root.getRightChild().getLabelCounts()[0] + "," + root.getLeftChild().getLabelCounts()[0] 
+        + "," + root.getRightChild().getLabelCounts()[1] + "," + root.getLeftChild().getLabelCounts()[1]);
     resultFileWriter.flush();
 
     // Close resultFileWriter
@@ -186,12 +196,15 @@ public class P2 {
     if(bestInformationGain == 0 || leftDataFeature.size() == 0 || rightDataFeature.size() == 0) { // leaf
       // make new node with dominant class labels
       if(Collections.frequency(trainDataLabel, 2) >= Collections.frequency(trainDataLabel, 4)) {
-        node = new DecisionTreeNode(bestFeature, bestThreshold, 2);
+        node = new DecisionTreeNode(bestFeature, bestThreshold, 2, 
+            Collections.frequency(trainDataLabel, 2), Collections.frequency(trainDataLabel, 4));
       } else {
-        node = new DecisionTreeNode(bestFeature, bestThreshold, 4);
+        node = new DecisionTreeNode(bestFeature, bestThreshold, 4,
+            Collections.frequency(trainDataLabel, 2), Collections.frequency(trainDataLabel, 4));
       }
     } else { // non-leaf
-      node = new DecisionTreeNode(bestFeature, bestThreshold, null);
+      node = new DecisionTreeNode(bestFeature, bestThreshold, null,
+          Collections.frequency(trainDataLabel, 2), Collections.frequency(trainDataLabel, 4));
       // Train for its children
       node.setRightChild(trainDecisionTree(rightDataFeature, rightDataLabel, featureList));
       node.setLeftChild(trainDecisionTree(leftDataFeature, leftDataLabel, featureList));

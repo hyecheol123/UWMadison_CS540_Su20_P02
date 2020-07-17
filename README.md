@@ -35,7 +35,7 @@ Code for daa preprocess and load is located in separated class, [Dataset.java](h
 - Data Loading, Test of Important Function Implementation
   - Related Question: [Q1](), [Q2]()
 - Train a binary decision stump (decision tree with depth 1) using the following feature: 5 (indexed according to the above list).
-  - Related Question: 
+  - Related Question: [Q3]()
 - Train a binary decision tree using the following features: 8, 4, 9, 7, 3 (indexed according to the same list).
   - Related Question: 
 - Classify the following patients using your tree.
@@ -51,3 +51,7 @@ Code for daa preprocess and load is located in separated class, [Dataset.java](h
   Enter the initial entropy at the root before the split (one number, rounded to 4 decimal places).
   - Before any split, the probability for each label is only depend on the number of label in entire train set.
   - Test for implementation of [entropy function]().
+- **Q3**  
+  For the decision stump (Part 1), enter the number of positive and negative instances in the training set above and below the threshold (four integers, comma-separated, in the order: above-benign, below-benign, above-malignant, below-malignant).
+  - Tracking information of counts inside DecisionTreeNode.
+  - Test for implementation of [training function]().
